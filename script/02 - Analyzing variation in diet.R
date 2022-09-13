@@ -4,6 +4,7 @@ library(dplyr)
 library(vegan)
 library(MASS)
 library(iNEXT)
+library(ggplot2)
 diet_table<-read.table("data/diet.txt",header=T)
 land_use<-as.data.frame(diet_table$Treatment)
 diet<-diet_table[,c(12:24)]
@@ -35,16 +36,16 @@ bootstrap_total
 
 # Testing bootstrapped samples #
 bootstrap_distance<-vegdist(sqrt(bootstrap_total),method="bray")
-grupos<-c(rep("Palm",100),rep("Pasture",100),rep("Forest",100))
+grupos<-c(rep("Oil palm",100),rep("Pasture",100),rep("Forest",100))
 adonis(bootstrap_distance~grupos)
 
 # Plotting NMDS #
 nmds<-isoMDS(bootstrap_distance,k=2)
 ggplot()+
   geom_point(aes(x=nmds$points[,1],y=nmds$points[,2],color=as.factor(grupos)))+
-  xlab("NMDS 1")+
-  ylab("NMDS 2")+
+  xlab("NMDS 1")+  ylab("NMDS 2")+
   labs(color="Land use")+
+  scale_color_manual(values=c("Forest"="#00BA38","Oil palm"="#619CFF","Pasture"="#F8766D"))+
   theme(panel.background = element_rect(fill = "white", colour = "black", size = 0.5), # opcoes graficas
         panel.grid.major = element_line(colour = NA),legend.position="bottom",
         panel.grid.minor = element_line(colour = NA),
@@ -72,11 +73,13 @@ teste_forest<-iNEXT(diet_forest2,q=0,datatype="abundance")
 ggiNEXT(teste_forest, type=1, se=TRUE, facet.var="none", color.var="site", grey=FALSE)
 
 diet_list<-list(diet_palm2[!diet_palm2==0],diet_pasture2[!diet_pasture2==0],diet_forest2[!diet_forest2==0])
-names(diet_list)<-c("Palm","Pasture","Forest")
+names(diet_list)<-c("Oil palm","Pasture","Forest")
 inext_list<-iNEXT(diet_list,q=0,datatype="abundance")
 ggiNEXT(inext_list, type=1)+
   ylab("Number of Food Items")+
-  theme(panel.background = element_rect(fill = "white", colour = "black", size = 0.5), # opcoes graficas
+  scale_color_manual(values=c("Forest"="#00BA38","Oil palm"="#619CFF","Pasture"="#F8766D"))+
+  scale_fill_manual(values=c("Forest"="#00BA38","Oil palm"="#619CFF","Pasture"="#F8766D"))+
+      theme(panel.background = element_rect(fill = "white", colour = "black", size = 0.5), # opcoes graficas
         panel.grid.major = element_line(colour = NA),legend.position="bottom",
         panel.grid.minor = element_line(colour = NA),
         axis.text = element_text(colour = "black", size = 10),

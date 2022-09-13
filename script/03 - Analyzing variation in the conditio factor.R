@@ -13,11 +13,13 @@ colnames(all_data)<-c("Treatment","k")
 all_data$k<-as.numeric(all_data$k)
 anova<-aov(k~Treatment,data=all_data)
 summary(anova)
+levels(all_data)
 
 # Plotting the condition factor #
 ggplot(aes(x=Treatment,y=k),data=all_data)+
   geom_violin(aes(fill=Treatment))+
   geom_jitter(alpha=0.3,shape=16, position=position_jitter(0.2))+
+  scale_fill_manual(values=c("FLORESTA"="#00BA38","PALMA"="#619CFF","PASTO"="#F8766D"))+
   stat_summary(fun=mean, geom="crossbar",size=0.3)+
   ylab("Condition factor")+  xlab("Land use")+
   scale_x_discrete(labels = c('Forest','Oil Palm','Pasture'))+

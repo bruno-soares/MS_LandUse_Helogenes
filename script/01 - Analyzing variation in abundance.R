@@ -24,11 +24,11 @@ summary(fit)
 tukey <- TukeyHSD(fit)
 tukey
 
+levels(abund$Treatment)
 # Graph
 Figure2<- ggplot(abund, aes(x=Treatment, y=log(N), fill = Treatment)) + 
-  geom_boxplot() +
-  xlab("") +
-  ylab("Log(Abundance)") +
+  geom_boxplot() + scale_fill_manual(values=c("Forest"="#00BA38","Oil palm"="#619CFF","Pasture"="#F8766D"))+
+  xlab("") +  ylab("Log(Abundance)") +
   annotate(geom="text", x=c("Forest", "Oil palm", "Pasture"), y=4, label=c("a", "ab", "b"), 
            size = 5, family = "serif") +
   theme(panel.background = element_rect(fill = "white", colour = NA),
@@ -40,7 +40,6 @@ Figure2<- ggplot(abund, aes(x=Treatment, y=log(N), fill = Treatment)) +
         axis.text.x = element_text(color ="black", size = 12, angle = 0),
         axis.text.y = element_text(color ="black", size = 12, angle = 0),
         legend.position = "none")
-
 Figure2 
 
 ggsave(plot = Figure2, "figures/Figure 2.tiff", dpi = 600, width = 5, height = 4, compression = "lzw")
