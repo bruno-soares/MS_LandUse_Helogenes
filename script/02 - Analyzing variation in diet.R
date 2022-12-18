@@ -3,7 +3,6 @@ source('script/utils.R')
 library(dplyr)
 library(vegan)
 library(MASS)
-library(iNEXT)
 library(ggplot2)
 diet_table<-read.table("data/diet.txt",header=T)
 land_use<-as.data.frame(diet_table$Treatment)
@@ -46,7 +45,7 @@ bootstrap_total
 names(bootstrap_total)
 bootstrap_distance<-vegdist(sqrt(bootstrap_total[,-14]),method="bray")
 grupos<-c(rep("Oil palm",100),rep("Pasture",100),rep("Forest",100))
-adonis2(bootstrap_distance~grupos+bootstrap_total$V14,permutations=10000)
+adonis2(bootstrap_distance~grupos+bootstrap_total$V14)
 permdisp_test<-betadisper(bootstrap_distance,grupos)
 permutest(permdisp_test,pairwise=TRUE)
 permdisp_test$group.distances
@@ -79,36 +78,3 @@ ggplot()+
         legend.background = element_rect(fill = "white"),
         legend.text = element_text(face = "bold", colour = "black", size = 10))
 ggsave(filename="figures/Figure 3.png",dpi=600,unit=c("cm"),width=13,height=10)
-
-# Testing variation in the number of consumed items between land uses #
-diet_palm2<-diet_palm %>% mutate_if(is.numeric, ~1 * (. != 0))
-diet_palm2<-colSums(diet_palm2)
-teste_palm<-iNEXT(diet_palm2,q=0,datatype="abundance",nboot = 999)
-ggiNEXT(teste_palm, type=1, se=TRUE, facet.var="none", color.var="site", grey=FALSE)
-
-diet_pasture2<-diet_pasture %>% mutate_if(is.numeric, ~1 * (. != 0))
-diet_pasture2<-colSums(diet_pasture2)
-teste_pasture<-iNEXT(diet_pasture2,q=0,datatype="abundance")
-ggiNEXT(teste_pasture, type=1, se=TRUE, facet.var="none", color.var="site", grey=FALSE)
-
-diet_forest2<-diet_forest %>% mutate_if(is.numeric, ~1 * (. != 0))
-diet_forest2<-colSums(diet_forest2)
-teste_forest<-iNEXT(diet_forest2,q=0,datatype="abundance",nboot=999)
-ggiNEXT(teste_forest, type=1, se=TRUE, facet.var="none", color.var="site", grey=FALSE)
-
-diet_list<-list(diet_palm2[!diet_palm2==0],diet_pasture2[!diet_pasture2==0],diet_forest2[!diet_forest2==0])
-names(diet_list)<-c("Oil palm","Pasture","Forest")
-inext_list<-iNEXT(diet_list,q=0,datatype="abundance",nboot=999)
-ggiNEXT(inext_list, type=1)+
-  ylab("Number of Food Items")+
-  scale_color_manual(values=c("Forest"="#00BA38","Oil palm"="#619CFF","Pasture"="#F8766D"))+
-  scale_fill_manual(values=c("Forest"="#00BA38","Oil palm"="#619CFF","Pasture"="#F8766D"))+
-      theme(panel.background = element_rect(fill = "white", colour = "black", size = 0.5), # opcoes graficas
-        panel.grid.major = element_line(colour = NA),legend.position="bottom",
-        panel.grid.minor = element_line(colour = NA),
-        axis.text = element_text(colour = "black", size = 10),
-        axis.title = element_text(colour = "black", size = 12, face = "bold"),
-        legend.title = element_blank(),
-        legend.background = element_rect(fill = "white"),
-        legend.text = element_text(face = "bold", colour = "black", size = 8))
-ggsave(filename="figures/Figure 4.tiff",dpi=600,unit=c("cm"),width=15,height=15,compression = "lzw")
