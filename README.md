@@ -7,7 +7,8 @@ Bruno E. Soares, Naraiana L. Benone, Cleonice M. C. Lobato, and Luciano F. A. Mo
 Submitted to Aquatic Ecology.
 
 ## To cite this data
-Data and R coding available in Zenodo: XXX.
+Data and R coding available in Zenodo: https://zenodo.org/badge/latestdoi/533504672.
+Cite as: Bruno Soares. (2022). bruno-soares/MS_LandUse_Helogenes: First release (v1.0). Zenodo. https://doi.org/10.5281/zenodo.7455259
 
 ## Description
 Data and R coding to analyze the effects of different land uses in the distribution, diet, and condition factor of the whale catfish in the Eastern Amazon. These results are discussed in the manuscript  "Pasture areas reduce the abundance and trophic niche width, but not the body condition of the Amazonian whale catfish", submitted to Aquatic Ecology.
