@@ -4,6 +4,7 @@ size<-read.table("data/size.txt",header=T)
 
 # Calculating Length-Weight relationship and the Condition Factor #
 eq<-lm(log(size$P.T)~log(size$C.T/10))
+summary(eq)
 k<-size$P.T/(exp(eq$coefficients[1])*(size$C.T/10)^eq$coefficients[2])
 k_forest<-k[which(size$Treatment=="FLORESTA")]
 k_palm<-k[which(size$Treatment=="PALMA")]

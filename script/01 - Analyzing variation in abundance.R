@@ -1,35 +1,40 @@
+library(vegan)
 library(lawstat)
 library(ggplot2)
 
-abund<-read.table("data/Abundance.txt", h=T)
-abund$Treatment <- factor(abu$Treatment, labels = c("Forest", "Oil palm", "Pasture"))
+abu <- read.table("clipboard", h=T)
+abu
 
-# Checking the Normality of the data #
-qqnorm(abund$N)
-qqline(abund$N)
-shapiro.test(abund$N)
+abu$Treatment <- factor(abu$Treatment, labels = c("Forest", "Oil palm", "Pasture"))
+str(abu)
 
-qqnorm(log(abund$N))
-qqline(log(abund$N))
-shapiro.test(log(abund$N))
+# Homocedasticity
 
-# Checking the Homocedasticity of the data #
-levene.test(log(abund$N), abund$Treatment)
+levene.test(abu$N, abu$Treatment)
 
-# One-way ANOVA #
-fit <- aov(log(N) ~ Treatment, data = abund)
+# One-way ANOVA
+
+fit <- aov(N ~ Treatment, data = abu)
 summary(fit)
 
+# Normality
+
+par(mfrow = c(2,2))
+plot(fit)
+shapiro.test(resid(fit))
+
 # Posthoc test (Tukey)
+
 tukey <- TukeyHSD(fit)
 tukey
 
-levels(abund$Treatment)
 # Graph
-Figure2<- ggplot(abund, aes(x=Treatment, y=log(N), fill = Treatment)) + 
+
+Figure2 <- ggplot(abu, aes(x=Treatment, y=N, fill = Treatment)) + 
   geom_boxplot() + scale_fill_manual(values=c("Forest"="#00BA38","Oil palm"="#619CFF","Pasture"="#F8766D"))+
-  xlab("") +  ylab("Log(Abundance)") +
-  annotate(geom="text", x=c("Forest", "Oil palm", "Pasture"), y=4, label=c("a", "ab", "b"), 
+  xlab("") +
+  ylab("Abundance") +
+  annotate(geom="text", x=c("Forest", "Oil palm", "Pasture"), y=40, label=c("a", "ab", "b"), 
            size = 5, family = "serif") +
   theme(panel.background = element_rect(fill = "white", colour = NA),
         panel.grid.minor = element_blank(),
