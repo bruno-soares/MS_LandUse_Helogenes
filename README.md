@@ -17,11 +17,11 @@ Data and R coding to analyze the effects of different land uses in the distribut
 In R, you may download all the data contained in this repository by using the download.file() function, then use the function unzip(). Example:
 
 `
-download.file(url="https://github.com/bruno-soares/MS_Ariid_Cooccurrence/archive/master.zip", destfile = "MS_LandUse_Helogenes.zip")
+download.file(url="https://github.com/bruno-soares/MS_LandUse_Helogenes/archive/master.zip", destfile = "MS_LandUse_Helogenes.zip")
 `
 
 `
-unzip(zipfile = "MS_Ariid_Cooccurrence.zip")
+unzip(zipfile = "MS_LandUse_Helogenes.zip")
 `
 
 R scripts are numbered in the order that the analyses are performed, from 01 to 03. All the data necessary to run analyses are availagle in /data and /results, so one can run any part of the script independently from running prior analysis. Make sure you install the necessary R packages before running the analysis.
